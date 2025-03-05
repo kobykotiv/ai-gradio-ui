@@ -1,20 +1,25 @@
-# Use the official Python image as the base image
 FROM python:3.10-slim
 
-# Set the working directory to /app
 WORKDIR /app
 
-# Copy the pyproject.toml and README.md files to the container
-COPY pyproject.toml README.md /app/
+# Install uv and create virtual environment
+RUN pip install --no-cache-dir uv && \
+    uv venv .venv
 
-# Install Poetry and project dependencies
-RUN pip install poetry && poetry install
+# Add virtual environment to PATH
+ENV PATH="/app/.venv/bin:$PATH"
+ENV VIRTUAL_ENV="/app/.venv"
 
-# Copy the rest of the application code to the container
-COPY . /app
+# Copy dependency files
+COPY pyproject.toml poetry.lock* README.md ./
 
-# Expose port 7860
-EXPOSE 7860
+# Install dependencies using uv into the virtual environment
+RUN . .venv/bin/activate && \
+    uv pip install gradio && \
+    uv pip install --no-cache .
 
-# Set the default command to run the application
-CMD ["poetry", "run", "python", "app.py"]
+# Copy the rest of the application code
+COPY . .
+
+# Command to run the application
+CMD ["python", "-m", "ai_gradio"]
