@@ -265,12 +265,25 @@ pip install 'ai-gradio[provider_name]'
 pip install 'ai-gradio[all]'
 ```
 
+## Docker
+
+### Building the Docker Image
+To build the Docker image, run the following command in the root of the repository:
+```bash
+docker build -t ai-gradio .
+```
+
+### Running the Docker Container
+To run the Docker container, use the following command:
+```bash
+docker run -p 7860:7860 ai-gradio
+```
+
+### Using Docker Compose
+To manage the services with Docker Compose, use the following command:
+```bash
+docker-compose up
+```
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-
-
-
-
-
